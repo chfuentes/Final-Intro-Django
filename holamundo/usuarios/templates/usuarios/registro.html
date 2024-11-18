@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+  Registro de Usuarios
+{% endblock %}
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4 justify-content-center align-items-center g-2">
+        <h1>Registro de Usuarios</h1>
+        <form action="{% url 'usuarios:registro' %}" method="post">
+          {% csrf_token %}
+          {{ form|crispy }}
+          <button class="btn btn-success d-grid gap-2 mx-auto">Registrar</button>
+        </form>
+      </div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+{% endblock %}

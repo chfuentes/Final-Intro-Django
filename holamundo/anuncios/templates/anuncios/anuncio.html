@@ -1,0 +1,20 @@
+{% extends 'layout.html' %}
+{% block title %}
+    {{anuncio.titulo}}
+{% endblock %}
+
+{% block content %}
+<h1>{{anuncio.titulo}}</h1>
+<div class="row align-items-md-stretch">
+    <div class="col-md-12">
+        <div class="h-100 p-2 text-bg-dark rounded-3">
+            <h2>{{anuncio.titulo}}</h2>
+            <img src="{{anuncio.imagen.url}}" width="200" height="200">
+            <p>{{anuncio.cuerpo}}</p>
+            <p>{{anuncio.fecha}}</p>
+            <p>Autor: {{anuncio.autor}}</p>
+            
+        </div>
+    </div>
+</div>
+{% endblock %}

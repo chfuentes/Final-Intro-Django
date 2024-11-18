@@ -1,0 +1,141 @@
+{% extends 'layout.html' %}
+{% block title %}
+  Lista de Anuncios
+{% endblock %}
+
+{% block content %}
+  <h1>Otra Lista de Anuncios</h1>
+  <p>Esta es mi pagina de Otro Listado de Anuncios</p>
+
+  <br />
+  <br />
+  {% csrf_token %}
+
+    
+    <table id="table"
+      data-show-export="true"
+      data-pagination="true"
+      {% comment %} data-side-pagination="server" {% endcomment %}
+      data-click-to-select="true"
+      data-show-toggle="true"
+      data-show-columns="true"
+      data-show-footer="true"
+      >
+    </table>
+    
+  <script>
+    var $table = $('#table')
+    
+    $(function () {
+        function operateFormatter(value, row, index) {
+          detalle = '<a href="#" role="button" class="btn btn-warning detalle" data-toogle="tooltip" title="Ver Detalle"><i class="bi bi-book"></i> Ver Detalle</a> &nbsp;&nbsp;'
+          editar =  '<button type="button" class="btn btn-success editar"><i class="bi bi-pencil"></i> Editar</button>&nbsp;&nbsp;'
+          editarCustom =  '<button type="button" class="btn btn-success editarCustom"><i class="bi bi-pencil"></i> Editar Custom</button>&nbsp;&nbsp;'
+          eliminar = '<button type="button" class="btn btn-danger eliminar"><i class="bi bi-trash"></i> Eliminar</button>&nbsp;&nbsp;'
+          return [detalle, editar,editarCustom, eliminar].join('')
+          }
+        
+          window.operateEvents = {
+            'click .editar': function (e, value, row, index) {
+                miid=row.id
+              window.location.href="/anuncios/editar_anuncio/"+miid
+            },
+            'click .editarCustom': function (e, value, row, index) {
+                miid=row.id
+              window.location.href="/anuncios/editar_anuncio_custom/"+miid
+            },
+            'click .detalle': function (e, value, row, index) {
+                mislug=row.slug
+              window.location.href="/anuncios/"+mislug
+            },
+            'click .eliminar': function (e, value, row, index) {
+              miid=row.id
+              const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+              $.ajax({
+                headers: {'X-CSRFToken' : csrftoken},
+                method: "POST",
+                url: "eliminar_anuncio/"+miid+"/",
+              })
+              .done(function( msg ) {
+                window.location.href="/anuncios/otrolistar"
+              });
+
+
+            },
+          }
+
+      var data = [{% for anuncio in anuncios %}
+        {id:"{{ anuncio.id }}",
+          titulo:"{{ anuncio.titulo }}",
+          fecha: "{{ anuncio.fecha }}",
+          autor: "{{ anuncio.autor }}",
+          slug: "{{ anuncio.slug }}",
+          operate: "Detalle"
+        },
+        {% endfor %}
+        ]
+
+        function initTable() {
+            $table.bootstrapTable('destroy').bootstrapTable({
+              height: 550,
+              locale: "es-cl",
+              data: data,
+              columns: [
+                [{
+                  field: 'id',
+                  title: 'id',
+                  visible: false,
+                  align: 'center'
+                },{
+                    field: 'slug',
+                    title: 'slug',
+                    visible: false,
+                    align: 'center'
+                  },{
+                    field: 'titulo',
+                    title: 'Titulo del Artículo',
+                    sortable: true,
+                    align: 'center'
+                  },
+                  {
+                    field: 'fecha',
+                    title: 'Fecha del Artículo',
+                    sortable: true,
+                    align: 'center'
+                  },
+                  {
+                    field: 'autor',
+                    title: 'Autor del Artículo',
+                    sortable: true,
+                    align: 'center'
+                  },
+                  {
+                    field: 'operate',
+                    title: 'Detalle',
+                    align: 'center',
+                    clickToSelect: false,
+                    events: window.operateEvents,
+                    formatter: operateFormatter
+                  }
+                ]
+              ]
+            })
+          
+        }
+
+        
+      
+      initTable()
+    })
+
+  </script>
+
+  {% if messages %}
+    {% for message in messages %}
+      <script>
+        mensaje(' {{ message }}')
+      </script>
+    {% endfor %}
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends 'layout.html' %}
+{% block title %}
+Lista de Anuncios
+{% endblock %}
+
+{% block content %}
+<h1>Lista de Anuncios</h1>
+<p>Esta es mi pagina de Listado de Anuncios</p>
+{% for anuncio in anuncios %}
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+        <h5 class="card-title">{{ anuncio.titulo }}</h5>
+        <p class="card-text">{{ anuncio.cuerpo }}</p>
+        <footer class="blockquote-footer">{{ anuncio.fecha }}</footer>
+        <a href="{% url 'anuncios:detalle' slug=anuncio.slug %}" class="btn btn-primary">Ver detalle</a>
+    </div>
+</div>
+<br>
+{% endfor %}
+
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            mensaje(' {{ message }}')
+        </script>
+    {% endfor %}
+{% endif %}
+
+{% endblock %}

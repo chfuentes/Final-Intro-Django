@@ -1,0 +1,52 @@
+{% extends 'layout.html' %}
+{% load crispy_forms_tags %}
+{% block title %}
+  Editar Anuncio Custom
+{% endblock %}
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4 justify-content-center align-items-center g-2">
+        <h1>Editar Anuncio Custom</h1>
+        <form action="{% url 'anuncios:editar_anuncio_custom' anuncio.id %}" method="post" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <label for="titulo" class="form-label">Título</label>
+            <input type="text" class="form-control" name="titulo" id="titulo" placeholder="Ingrese un título para el anuncio" value="{{ anuncio.titulo }}" />
+          </div>
+
+          <div class="mb-3">
+            <label for="cuerpo" class="form-label">Cuerpo</label>
+            <textarea class="form-control" name="cuerpo" id="cuerpo" rows="3">{{ anuncio.cuerpo }}</textarea>
+          </div>
+
+          <div class="input-group mb-3">
+            <span class="input-group-text">Actualmente</span>
+            <div class="form-control d-flex h-auto">
+              <span class="text-break flex-grow-1"><a href="/media/anuncio3.jpg">{{ anuncio.imagen }}</a></span>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="imagen" class="form-label">Imagen</label>
+            <input class="form-control" type="file" name="imagen" id="imagen" />
+          </div>
+
+          <div class="mb-3">
+            <label for="tipo" class="form-label">Tipo</label>
+            <select id="tipo" name="tipo" class="form-select" aria-label="Default select example">
+              {% for tipo in tipos %}
+                <option value="{{ tipo.id }}" {% if tipo.id == anuncio.tipo_id %} selected {% endif %} > {{ tipo.glosa_tipo }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-success d-grid gap-2 mx-auto">Editar Anuncio</button>
+        </form>
+      </div>
+      <div class="col-sm-4"></div>
+    </div>
+  </div>
+{% endblock %}
